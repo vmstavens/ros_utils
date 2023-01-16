@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+
+	<name>ros_utils_py</name>
+	<version>1.0.0</version>
+	<description>sr_tactile_perception desciption</description>
+
+	<author email="vista17@student.sdu.dk">Victor Melbye Staven</author>
+	<maintainer email="vista17@student.sdu.dk">Victor Melbye Staven</maintainer>
+
+	<license>BSD</license>
+
+	<!-- build tool -->
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<!-- ROS packages -->
+	<depend>rospy</depend>
+
+</package>

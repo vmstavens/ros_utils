@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+
+	<name>ros_utils</name>
+	<version>1.0.0</version>
+	<description>Metapackage for in-hand pose estimation for the Shadow Dextereous hand</description>
+
+	<author email="vista17@student.sdu.dk">Victor Staven</author>
+	<maintainer email="vista17@student.sdu.dk">Victor Staven</maintainer>
+
+	<license>BSD</license>
+
+	<url type="repository">https://github.com/vmstavens/ros_utils</url>
+
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<exec_depend>ros_utils_py</exec_depend>
+
+	<export>
+		<metapackage />
+	</export>
+
+</package>
