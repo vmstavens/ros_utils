@@ -1,0 +1,6 @@
+<launch>
+	<!-- be able to print with info -->
+	<arg name="output" default="screen" />
+	<node pkg="ros_utils_py" name="example" type="example.py" output="$(arg output)" />
+
+</launch>

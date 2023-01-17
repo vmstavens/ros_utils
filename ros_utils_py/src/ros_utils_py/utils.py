@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from datetime import datetime
+import time
 
 def devprint(msg: str) -> None:
 	class color_conf:
@@ -23,3 +24,8 @@ def devprint(msg: str) -> None:
 	COLOR_CONF = color_conf.BLUE
 	FORMAT_CONF = format_conf.BOLD
 	print(f"{COLOR_CONF}{FORMAT_CONF}[DEV][{datetime.now()}]: {msg} {END}")
+ 
+def keep_alive(node_name: str = "[place holder node name]") -> None:
+	while (True):
+		time.sleep(1)
+		devprint(f"keeping node {node_name} alive..............................")
