@@ -1,0 +1,6 @@
+<launch>
+	<!-- be able to print with info -->
+	<arg name="output" default="screen" />
+	<node pkg="ros_utils_cpp" name="example_utils" type="example_utils" output="$(arg output)" />
+
+</launch>

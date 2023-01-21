@@ -1,0 +1,6 @@
+<launch>
+
+	<arg name="output" default="screen" />
+	<node pkg="ros_utils_cpp" name="example_encoding" type="example_encoding" output="$(arg output)" />
+
+</launch>

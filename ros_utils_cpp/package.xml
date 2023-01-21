@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package format="2">
+
+	<name>ros_utils_cpp</name>
+	<version>1.0.0</version>
+	<description>Collection of modern utilities for the ROS/Gazebo/MoveIt workflow</description>
+
+	<author email="vista17@student.sdu.dk">Victor Melbye Staven</author>
+	<maintainer email="vista17@student.sdu.dk">Victor Melbye Staven</maintainer>
+
+	<license>BSD</license>
+
+	<url type="repository">https://google.com</url>
+
+	<!-- build tool -->
+	<buildtool_depend>catkin</buildtool_depend>
+
+	<!-- ROS packages -->
+	<depend>roscpp</depend>
+	<depend>eigen_conversions</depend>
+	<depend>roslib</depend>
+	<depend>cv_bridge</depend>
+	<depend>sensor_msgs</depend>
+	<depend>geometric_shapes</depend>
+	<depend>gazebo_msgs</depend>
+	<depend>geometry_msgs</depend>
+	<depend>moveit_msgs</depend>
+	<depend>moveit_core</depend>
+
+	<!-- libraries -->
+	<depend>libopencv-contrib-dev</depend>
+	<depend>libpcl-all</depend>
+	<depend>eigen</depend>
+	<depend>OpenCV</depend>
+	<depend>PCL</depend>
+	<depend>Eigen3</depend>
+
+</package>
