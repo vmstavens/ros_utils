@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	ros_utils_cpp::utils::devprint("v = \n" + v.DebugString() );
 
 	// convert v to ::Eigen::Affine3d (4x4 transformation matrix)
-	::Eigen::Affine3d T_vector = ros_utils_cpp::Eigen::toEigen(v);
+	::Eigen::Affine3d T_vector = ros_utils_cpp::Eigen::make_tf(v);
 
 	// print eigen affine matrix
 	ss << T_vector.matrix();
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 	ros_utils_cpp::utils::devprint("p = \n" + p.DebugString() );
 
 	// convert p to ::Eigen::Affine3d (4x4 transformation matrix)
-	::Eigen::Affine3d T_pose = ros_utils_cpp::Eigen::toEigen(p);
+	::Eigen::Affine3d T_pose = ros_utils_cpp::Eigen::make_tf(p);
 
 	// print eigen affine matrix
 	ss << T_pose.matrix();
