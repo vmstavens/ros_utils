@@ -24,8 +24,7 @@
 	<depend>geometric_shapes</depend>
 	<depend>gazebo_msgs</depend>
 	<depend>geometry_msgs</depend>
-	<depend>moveit_msgs</depend>
-	<depend>moveit_core</depend>
+	<depend>ignition-msgs5</depend>
 
 	<!-- libraries -->
 	<depend>libopencv-contrib-dev</depend>

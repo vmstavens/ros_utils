@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(
 	catkin REQUIRED
 	COMPONENTS
+		# ignition_msgs5
 		roscpp
 		roslib
 		cv_bridge
@@ -23,12 +24,10 @@ find_package(
 		geometry_msgs
 		moveit_msgs
 		moveit_core
-		ignition-msgs5
 )
 
-# added ##################################################################################
 # Find the Ignition msgs library
-# find_package(ignition-msgs5 QUIET REQUIRED)
+find_package(ignition-msgs5 QUIET REQUIRED)
 
 # OpenCV
 find_package(OpenCV 4 REQUIRED)
@@ -79,9 +78,8 @@ catkin_package(
 		geometric_shapes
 		gazebo_msgs
 		geometry_msgs
-		moveit_msgs
-		moveit_core
 	DEPENDS
+		ignition-msgs5
 		OpenCV
 		PCL
 		EIGEN3
@@ -109,20 +107,13 @@ add_library(ros_utils_cpp
 	src/utils.cpp
 	src/eigen.cpp
 	src/encoding.cpp
-
-	# src/lib_eigen.cpp
-	# src/lib_gazebo.cpp
-	# src/lib_gazebo_sensors.cpp
-	# src/lib_geometry_msgs.cpp
-	# src/lib_moveit.cpp
-	# src/lib_ros.cpp
-	# src/lib_std.cpp
 )
 target_link_libraries(
 	ros_utils_cpp 
 	${catkin_LIBRARIES} 
 	${OpenCV_LIBRARIES} 
 	${PCL_LIBRARIES}
+	${IGNITION-MSGS_LIBRARIES}
 	)
 
 ################################################################################################

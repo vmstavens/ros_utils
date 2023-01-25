@@ -24,7 +24,7 @@ catkin_python_setup()
 catkin_install_python(
   PROGRAMS 
     src/ros_utils_py/utils.py
-    examples/example.py
+    examples/example_utils.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

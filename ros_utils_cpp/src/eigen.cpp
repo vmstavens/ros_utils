@@ -4,12 +4,6 @@
 #include <Eigen/src/Geometry/Transform.h>
 #include <ignition/math/Quaternion.hh>
 #include <ignition/math/Vector3.hh>
-// #include <Eigen/src/Core/Matrix.h>
-// #include <Eigen/src/Core/VectorBlock.h>
-// #include <Eigen/src/Geometry/Quaternion.h>
-// #include <Eigen/src/Geometry/Transform.h>
-// #include <ignition/msgs/quaternion.pb.h>
-// #include <ignition/math/Pose3.hh>
 
 namespace ros_utils_cpp
 {
