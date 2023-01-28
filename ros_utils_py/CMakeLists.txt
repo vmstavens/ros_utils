@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.4)
+# cmake_minimum_required(VERSION 3.12)
 project(ros_utils_py)
 
 # find catkin and any catkin packages
