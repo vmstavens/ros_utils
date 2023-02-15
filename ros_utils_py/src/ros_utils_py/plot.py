@@ -25,6 +25,7 @@ class Plotter:
 		self.fig_2D.tight_layout()
 		self.fig_3D.tight_layout()
   
+		plt.ion()
 		plt.show(block=False)
 
 	def _update(self):

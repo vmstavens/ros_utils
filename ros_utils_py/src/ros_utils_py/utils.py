@@ -3,6 +3,11 @@
 from datetime import datetime
 import time
 import signal
+import rospkg
+from ros_utils_py.log import Logger
+import os
+
+__utils_logger = Logger()
 
 class COLORS:
 	"""should only be used as input for devprint() """
@@ -67,3 +72,34 @@ def kill_on_ctrl_c() -> None:
 		exit(1)
 
 	signal.signal(signal.SIGINT, handler)
+
+def create_pkg_dir(current_file_name: str, name_of_folder: str = "log/") -> str:
+	"""creates a folder in the package directory
+
+	Args:
+		current_file_name (str): the current file's name i.e. __file__
+		name_of_folder (str): the name of the folder you want created
+
+	Returns:
+		bool: did the creation complete successfully
+	"""
+
+	# make sure the folder name has the right "/" ending
+	name_of_folder = name_of_folder + "/" if name_of_folder[-1] != "/" else name_of_folder
+
+	# get the package name which contains the file file_name
+	pkg_name = rospkg.get_package_name(current_file_name)
+
+	# get the corresponding package path
+	pkg_path: str = rospkg.RosPack().get_path(pkg_name) + "/"
+
+	__utils_logger.success("I have found this package: " + pkg_path)
+
+	data_dir: str = pkg_path + "data/"
+
+	# create pkg/log/
+	if not os.path.exists(data_dir):
+		__utils_logger.info("The logging dir did not exist and i therefore created: " + data_dir)
+		os.mkdir(data_dir)
+  
+	return data_dir
