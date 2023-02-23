@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from ros_utils_py import devprint, COLORS, LOG_LEVELS
+from ros_utils_py import devprint, COLORS_TXT, LOG_LEVELS
 from datetime import date
 import rospkg
 import os
@@ -12,23 +12,23 @@ class Logger():
 
 	def info(self, msg: str) -> None:
 		if self._log_dir != "":
-			devprint(msg + "\n", file_path=self._log_dir,color=COLORS.BLUE, log_level=LOG_LEVELS.INFO)
-		devprint(msg, color=COLORS.BLUE, log_level=LOG_LEVELS.INFO)
+			devprint(msg + "\n", file_path=self._log_dir,color=COLORS_TXT.BLUE, log_level=LOG_LEVELS.INFO)
+		devprint(msg, color=COLORS_TXT.BLUE, log_level=LOG_LEVELS.INFO)
 
 	def warn(self, msg: str) -> None:
 		if self._log_dir != "":
-			devprint(msg + "\n", file_path=self._log_dir,color=COLORS.YELLOW, log_level=LOG_LEVELS.WARN)
-		devprint(msg, color=COLORS.YELLOW, log_level=LOG_LEVELS.WARN)
+			devprint(msg + "\n", file_path=self._log_dir,color=COLORS_TXT.YELLOW, log_level=LOG_LEVELS.WARN)
+		devprint(msg, color=COLORS_TXT.YELLOW, log_level=LOG_LEVELS.WARN)
 
 	def error(self, msg: str) -> None:
 		if self._log_dir != "":
-			devprint(msg + "\n", file_path=self._log_dir,color=COLORS.RED, log_level=LOG_LEVELS.ERROR)
-		devprint(msg, color=COLORS.RED, log_level=LOG_LEVELS.ERROR)
+			devprint(msg + "\n", file_path=self._log_dir,color=COLORS_TXT.RED, log_level=LOG_LEVELS.ERROR)
+		devprint(msg, color=COLORS_TXT.RED, log_level=LOG_LEVELS.ERROR)
 
 	def success(self, msg: str) -> None:
 		if self._log_dir != "":
-			devprint(msg + "\n", file_path=self._log_dir,color=COLORS.GREEN, log_level=LOG_LEVELS.SUCCESS)
-		devprint(msg, color=COLORS.GREEN, log_level=LOG_LEVELS.SUCCESS)
+			devprint(msg + "\n", file_path=self._log_dir,color=COLORS_TXT.GREEN, log_level=LOG_LEVELS.SUCCESS)
+		devprint(msg, color=COLORS_TXT.GREEN, log_level=LOG_LEVELS.SUCCESS)
 
 	def _init_log_dir(self, file_name: str) -> str:
 		"""This creates a log folder for logging files in the package folder with the node calling this method. The input should simply be __file__. This function should only be called once in the beginning of the node.
@@ -46,13 +46,13 @@ class Logger():
 		# get the corresponding package path
 		pkg_path:str = rospkg.RosPack().get_path(pkg_name) + "/"
 
-		devprint("I have found this package: " + pkg_path, color=COLORS.GREEN)
+		devprint("I have found this package: " + pkg_path, color=COLORS_TXT.GREEN)
 
 		logging_dir:str = pkg_path + "log/"
 
 		# create pkg/log/
 		if not os.path.exists(logging_dir):
-			devprint("The logging dir did not exist and i therefore created: " + logging_dir, color=COLORS.GREEN)
+			devprint("The logging dir did not exist and i therefore created: " + logging_dir, color=COLORS_TXT.GREEN)
 			os.mkdir(logging_dir)
 
 		# create pkg/log/<date>.log

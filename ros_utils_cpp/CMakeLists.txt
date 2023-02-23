@@ -43,7 +43,7 @@ find_package(
 add_definitions(${PCL_DEFINITIONS})
 
 # Finding Eigen is somewhat complicated because of our need to support Ubuntu
-# all the way back to saucy.  First we look for the Eigen3 cmake module
+# all the way back to saucy.  First, we look for the Eigen3 cmake module
 # provided by the libeigen3-dev on newer Ubuntu.  If that fails, then we
 # fall-back to the version provided by cmake_modules, which is a stand-in.
 find_package(Eigen3 QUIET)

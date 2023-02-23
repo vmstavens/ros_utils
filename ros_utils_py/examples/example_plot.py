@@ -9,14 +9,7 @@ from std_msgs.msg import Float32MultiArray
 
 
 def live_plotting_callback(msg: Float32MultiArray, plotter: Plotter):
-	if msg.data != None:
-		plotter.plot2D("name1", msg.data)
-		plotter.plot2D("name2", [random() for i in range(10)])
-		plotter.scatter2D("name3", [random() for i in range(10)], [random() for i in range(10)])
-		plotter.scatter3D("name2",
-			[random() for i in range(10)], 
-			[random() for i in range(10)],
-			[random() for i in range(10)])
+	return
 
 def main() -> None:
 	# u a wizard mr. 

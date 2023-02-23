@@ -4,12 +4,10 @@ from datetime import datetime
 import time
 import signal
 import rospkg
-from ros_utils_py.log import Logger
 import os
+from typing import Dict
 
-__utils_logger = Logger()
-
-class COLORS:
+class COLORS_TXT:
 	"""should only be used as input for devprint() """
 	PURPLE    = '\033[95m'
 	CYAN      = '\033[96m'
@@ -33,7 +31,17 @@ class LOG_LEVELS:
 	ERROR = "ERROR"
 	SUCCESS  = "SUCCESS"
 
-def devprint(msg: str, file_path:str = "", color: str = COLORS.BLUE, log_level: str = LOG_LEVELS.INFO, format: str = TXT_FORMAT.BOLD) -> None:
+class COLORS_RGBA:
+	# the colors associated with each finger according to https://elifesciences.org/articles/15292
+	# from left most finger to right most: magenta(246, 0, 248, 255), blue(90, 0, 255, 255), green(0, 248, 0, 255), yellow(243, 255, 0, 255) and red(255, 0, 0, 255) in HLS format
+	# the colors are extracted from a picture in the paper using https://imagecolorpicker.com/
+	MAGENTA = ( 0.964705882,       0.0, 0.97254902, 1.0) # (246.0 / 255.0 , 0.0 / 255.0, 248.0 / 255.0, 255.0 / 255.0)
+	BLUE    = ( 0.352941176,       0.0,        1.0, 1.0) # (90.0  / 255.0 , 0.0   / 255.0, 255.0 / 255.0, 255.0 / 255.0 )
+	GREEN   = (         0.0, 0.97254902,       0.0, 1.0) # (0.0   / 255.0 , 248.0 / 255.0, 0.0   / 255.0, 255.0 / 255.0 )
+	YELLOW  = ( 0.952941176,        1.0,       0.0, 1.0) # (243.0 / 255.0 , 255.0 / 255.0, 0.0   / 255.0, 255.0 / 255.0 )
+	RED     = (         1.0,        0.0,       0.0, 1.0) # (255.0 / 255.0 , 0.0   / 255.0, 0.0   / 255.0, 255.0 / 255.0 )
+
+def devprint(msg: str, file_path:str = "", color: str = COLORS_TXT.BLUE, log_level: str = LOG_LEVELS.INFO, format: str = TXT_FORMAT.BOLD) -> None:
 	"""prints the input string in an easy to spot format when scrolling through the ros gazebo cluttered terminal. The default formatting is blue and bold text, but can be configured as pleased.
 
 	Args:
@@ -93,13 +101,14 @@ def create_pkg_dir(current_file_name: str, name_of_folder: str = "log/") -> str:
 	# get the corresponding package path
 	pkg_path: str = rospkg.RosPack().get_path(pkg_name) + "/"
 
-	__utils_logger.success("I have found this package: " + pkg_path)
+	devprint("I have found this package: " + pkg_path, color=COLORS_TXT.GREEN)
 
 	data_dir: str = pkg_path + "data/"
 
 	# create pkg/log/
 	if not os.path.exists(data_dir):
-		__utils_logger.info("The logging dir did not exist and i therefore created: " + data_dir)
+		devprint("The logging dir did not exist and i therefore created: " + data_dir)
 		os.mkdir(data_dir)
   
 	return data_dir
+
