@@ -14,7 +14,7 @@ find_package(
 		message_runtime
 )
 
-add_message_files(FILES PointCloud.msg)
+add_message_files(FILES Color.msg PointCloud.msg)
 
 ## process setup.py
 catkin_python_setup()

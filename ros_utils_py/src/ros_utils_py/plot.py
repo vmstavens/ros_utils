@@ -50,7 +50,7 @@ class Plotter:
 		self.centroid3D:        Vector3 = Vector3(0.5, 0.5, 0.5)
 		self.centroid3D_pad:    float = 0.1
 		self.n_length:          float = self.centroid3D_pad * 0.3
-  
+		# a: float_32 = 1.0
 		# in case of weird error with illegal access to private variables...
 		while True:
 			try:
@@ -87,15 +87,26 @@ class Plotter:
 
 		for c in unique_colors:
 
+			self.__log.info("-------------------START-----------------------")
 			# get the indices of the color c
 			colors_indices = [i for i, ci in enumerate(colors_as_tuples) if ci == c]
-			# 0.3529411852359772, 0.0, 1.0, 1.0 
-			#    (0.35294117647058826, 0.0, 1.0, 1.0
-			# 0.3529411852359772, 0.0, 1.0, 1.0
+			self.__log.error(f"{colors_as_tuples=}")
+			self.__log.error(f"{unique_colors=}")
 			self.__log.warn(f"{c=} and {legend_labels=}")
    
+   
+			# c = (0.3529411852359772, 0.0, 1.0, 1.0) and 
+
+			# legend_labels={
+				# (0.964705882, 0.0, 0.97254902, 1.0) : 'thumb_finger', 
+				# (0.352941176, 0.0, 1.0, 1.0)        : 'index_finger', 
+				# (0.0, 0.97254902, 0.0, 1.0)         : 'middle_finger', 
+				# (0.952941176, 1.0, 0.0, 1.0)        : 'ring_finger', 
+				# (1.0, 0.0, 0.0, 1.0)                : 'pinky_finger'}
+   
+   
 			# cant do a tuple look up?! good luck ------------------------------------------------------------------
-			legend = legend_labels[c]
+			legend: str = legend_labels[c]
    
 			# get the position points
 			points_xs = [pc.positions[index_c].x for index_c in colors_indices]
@@ -120,10 +131,15 @@ class Plotter:
 			self.ax_3D.set_xlim(self.centroid3D.x - 0.5 * self.centroid3D_pad, self.centroid3D.x + 0.5 * self.centroid3D_pad)
 			self.ax_3D.set_ylim(self.centroid3D.y - 0.5 * self.centroid3D_pad, self.centroid3D.y + 0.5 * self.centroid3D_pad)
 			self.ax_3D.set_zlim(self.centroid3D.z - 0.5 * self.centroid3D_pad, self.centroid3D.z + 0.5 * self.centroid3D_pad)
+   
+			self.ax_3D.set_xlabel("x [m]")
+			self.ax_3D.set_ylabel("y [m]")
+			self.ax_3D.set_zlabel("z [m]")
 
 			# plot the point cloud
-			self.ax_3D.scatter(points_xs, points_ys, points_zs,c = c,label=legend)
-			self.ax_3D.legend()
+			self.ax_3D.scatter(points_xs, points_ys, points_zs,c = c)
+			# self.ax_3D.scatter(points_xs, points_ys, points_zs,c = c,label=legend)
+			# self.ax_3D.legend()
    
 			# iterate over all points
 			for i in range(len( points_xs )):

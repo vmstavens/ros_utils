@@ -10,5 +10,5 @@ geometry_msgs/Vector3[] normals
 # if the message contains no information
 bool empty
 
-# the colors of the points in the pointcloud cloud
-std_msgs/ColorRGBA[] colors
+# the colors of the points in the pointcloud cloud, this uses float 64 rather than 32
+ros_utils_py/Color[] colors
