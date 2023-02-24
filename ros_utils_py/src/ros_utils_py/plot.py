@@ -6,7 +6,7 @@ from geometry_msgs.msg import Vector3
 from matplotlib import pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 from mpl_toolkits.mplot3d import Axes3D, proj3d
-from ros_utils_py.msg import PointCloud
+from ros_utils_py.msg import PointCloud, Color
 from ros_utils_py.log import Logger
 from ros_utils_py.utils import COLORS_RGBA
 import rospy
@@ -62,51 +62,46 @@ class Plotter:
 				self.__log.error("Failed to enable live plotter... trying again...")
 				continue
 
+	def find_uiques(self,l: List[Color]):
+		unique_list = []
+		for c in l:
+			# does c exist in unique_list
+			for u in unique_list:
+				if u != c:
+					continue
+				else:
+					break
+			unique_list.append(c)
+		return
+
 	def pcPlot(self, pc: PointCloud, title: str = "Title") -> None:
 
 		plt.clf()
 		plt.title(title)
 
-		# convert ColorRGBA to Tuple and create array of unique colors
-		colors_as_tuples = [(c.r, c.g, c.b, c.a) for c in pc.colors]
-		unique_colors = list( set( colors_as_tuples ) )
-
+		unique_colors: List[str] = list(set([ c.label for c in pc.colors ]))
+	
 		# if no data is received, just plot the previously received data
 		self.__prev_pc = self.__curr_pc
 		self.__curr_pc = pc if not pc.empty else self.__prev_pc
 
 		self.ax_3D = self.fig_3D.add_subplot(1, 1, 1, projection="3d")
   
-		legend_labels = {
-				COLORS_RGBA.MAGENTA: "thumb_finger",
-				COLORS_RGBA.BLUE   : "index_finger",
-				COLORS_RGBA.GREEN  : "middle_finger",
-				COLORS_RGBA.YELLOW : "ring_finger",
-				COLORS_RGBA.RED    : "pinky_finger"
+		legend_labels: Dict[str,str] = {
+				COLORS_RGBA.MAGENTA.label: "thumb_finger",
+				COLORS_RGBA.BLUE.label   : "index_finger",
+				COLORS_RGBA.GREEN.label  : "middle_finger",
+				COLORS_RGBA.YELLOW.label : "ring_finger",
+				COLORS_RGBA.RED.label    : "pinky_finger"
 		}
 
-		for c in unique_colors:
+		for l in unique_colors:
 
-			self.__log.info("-------------------START-----------------------")
 			# get the indices of the color c
-			colors_indices = [i for i, ci in enumerate(colors_as_tuples) if ci == c]
-			self.__log.error(f"{colors_as_tuples=}")
-			self.__log.error(f"{unique_colors=}")
-			self.__log.warn(f"{c=} and {legend_labels=}")
-   
-   
-			# c = (0.3529411852359772, 0.0, 1.0, 1.0) and 
+			colors_indices = [i for i, ci in enumerate(pc.colors) if ci.label == l]
 
-			# legend_labels={
-				# (0.964705882, 0.0, 0.97254902, 1.0) : 'thumb_finger', 
-				# (0.352941176, 0.0, 1.0, 1.0)        : 'index_finger', 
-				# (0.0, 0.97254902, 0.0, 1.0)         : 'middle_finger', 
-				# (0.952941176, 1.0, 0.0, 1.0)        : 'ring_finger', 
-				# (1.0, 0.0, 0.0, 1.0)                : 'pinky_finger'}
-   
-   
 			# cant do a tuple look up?! good luck ------------------------------------------------------------------
-			legend: str = legend_labels[c]
+			legend: str = legend_labels[l]
    
 			# get the position points
 			points_xs = [pc.positions[index_c].x for index_c in colors_indices]
@@ -137,9 +132,9 @@ class Plotter:
 			self.ax_3D.set_zlabel("z [m]")
 
 			# plot the point cloud
-			self.ax_3D.scatter(points_xs, points_ys, points_zs,c = c)
-			# self.ax_3D.scatter(points_xs, points_ys, points_zs,c = c,label=legend)
-			# self.ax_3D.legend()
+			color_code = pc.colors[colors_indices[0]].color_code
+			self.ax_3D.scatter(points_xs, points_ys, points_zs, c = color_code, label = legend)
+			self.ax_3D.legend()
    
 			# iterate over all points
 			for i in range(len( points_xs )):
@@ -152,7 +147,7 @@ class Plotter:
 				n = self.Arrow3D(
 					start   = start,
 					end     = end,
-					mutation_scale = 5, lw=1, arrowstyle = "-|>", color = c) # this is just the style
+					mutation_scale = 5, lw=1, arrowstyle = "-|>", color = color_code) # this is just the style
 				
 				self.ax_3D.add_artist(n)
 
