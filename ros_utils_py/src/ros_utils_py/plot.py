@@ -151,6 +151,11 @@ class Plotter:
 				
 				self.ax_3D.add_artist(n)
 
+			# self.__log.warn(f"Currently I have {len(unique_colors)} unique colors...")
+			# if len(unique_colors) == 4:
+			# 	self.__log.success(f"Saved figure ------------------------------")
+			# 	plt.savefig("/home/user/projects/shadow_robot/base/src/in_hand_pose_estimation/sr_tactile_perception/plot3d.png")
+
 		# plt.draw()
 		self.fig_3D.canvas.draw_idle()
 		self.fig_3D.canvas.flush_events()

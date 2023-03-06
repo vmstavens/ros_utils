@@ -4,7 +4,7 @@ from gazebo_msgs.msg import ContactState
 from typing import Dict, List, Optional, Union
 from ros_utils_py.msg import PointCloud
 from geometry_msgs.msg import Vector3
-from math import pow
+from math import pow, acos, sqrt
 
 class gazebo:
 
@@ -33,14 +33,14 @@ class gazebo:
 	def point_cloud_to_dict(pc: PointCloud) -> Dict[str,Union[List,bool]]:
 		"""converts a point cloud from ros_utils_py into a dictionary"""
 		return {
-				"positions_x": [p.x for p in pc.positions],
-				"positions_y": [p.y for p in pc.positions],
-				"positions_z": [p.z for p in pc.positions],
-				"normals_x"  : [n.x for n in pc.normals],
-				"normals_y"  : [n.y for n in pc.normals],
-				"normals_z"  : [n.z for n in pc.normals],
-				"empty"      : (len(pc.positions) == 0)
-				}
+			"positions_x": [p.x for p in pc.positions],
+			"positions_y": [p.y for p in pc.positions],
+			"positions_z": [p.z for p in pc.positions],
+			"normals_x"  : [n.x for n in pc.normals],
+			"normals_y"  : [n.y for n in pc.normals],
+			"normals_z"  : [n.z for n in pc.normals],
+			"empty"      : (len(pc.positions) == 0)
+		}
 
 	@staticmethod
 	def combine_point_clouds(*args: PointCloud) -> PointCloud:
@@ -59,18 +59,3 @@ class gazebo:
 			is_empty.append(point_cloud.empty)
 		res.empty = True if all(is_empty) else False
 		return res
-
-	@staticmethod
-	def dot(a: Vector3, b: Vector3) -> float:
-		"""perform a dot product (scalar product) of the two geometry_msgs.msg.Vector3 provided"""
-		return a.x * b.x + a.y * b.y + a.z * b.z
-
-	@staticmethod
-	def pow(a: Vector3, b: float) -> Vector3:
-		"""sets each element in a to the power of b, where a is a geometry_msgs.msg.Vector3 and b is a float"""
-		return Vector3( pow(a.x,b), pow(a.y,b), pow(a.z,b) )
-
-	@staticmethod
-	def prod(a: Vector3, b: float) -> Vector3:
-		"""multiply each element in a with b, where a is a geometry_msgs.msg.Vector3 and b is a float"""
-		return Vector3( a.x*b, a.y*b, a.z*b )
