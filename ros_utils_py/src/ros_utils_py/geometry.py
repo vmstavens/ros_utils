@@ -25,6 +25,16 @@ class geometry:
 		return sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2))
 
 	@staticmethod
+	def l2_dist(a: Vector3, b: Vector3):
+		"""Euclidean distance between 3D points in space"""
+		return sqrt( pow(a.x - b.x,2) + pow(a.y - b.y,2) + pow(a.z - b.z,2) )
+
+	@staticmethod
 	def angle(a: Vector3, b: Vector3) -> float:
 		"""returns the angle between the two vectors a and b"""
 		return acos( ( geometry.dot(a,b) ) / (  geometry.l2(a) * geometry.l2(b)) )
+
+	@staticmethod
+	def flip(a: Vector3) -> Vector3:
+		"""flips the direction of the vector a"""
+		return Vector3( -1.0*a.x, -1.0*a.y, -1.0*a.z)
