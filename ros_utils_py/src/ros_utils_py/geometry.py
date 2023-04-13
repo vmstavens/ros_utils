@@ -2,6 +2,7 @@
 
 from geometry_msgs.msg import Vector3
 from math import sqrt, pow, acos
+from typing import Tuple
 
 class geometry:
 	@staticmethod
@@ -38,3 +39,13 @@ class geometry:
 	def flip(a: Vector3) -> Vector3:
 		"""flips the direction of the vector a"""
 		return Vector3( -1.0*a.x, -1.0*a.y, -1.0*a.z)
+
+	@staticmethod
+	def tup2vec(t: Tuple) -> Vector3:
+		"""convert a tuple to a geometry.Vector3"""
+		return Vector3(t[0], t[1], t[2])
+
+	@staticmethod
+	def vec2tup(v: Vector3) -> Tuple:
+		"""convert a tuple to a geometry.Vector3"""
+		return v.x, v.y, v.z
