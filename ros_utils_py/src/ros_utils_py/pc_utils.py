@@ -12,6 +12,8 @@ import random
 import json
 from ros_utils_py.geometry import geometry as geo
 import copy
+from pyntcloud import PyntCloud
+import pandas as pd
 
 class PointCloudUtils:
 	class PointCloud:
@@ -52,8 +54,8 @@ class PointCloudUtils:
 
 			# in case data is provided
 			self.__o3d_pc.points = o3d.utility.Vector3dVector(np.asarray(self.__points))
-			if len(self.__normals.flatten()) != 0:
-				self.__o3d_pc.normals = o3d.utility.Vector3dVector(np.asarray(self.__normals))
+			# if len(self.__normals.flatten()) != 0:
+			self.__o3d_pc.normals = o3d.utility.Vector3dVector(np.asarray(self.__normals))
 			# if len(self.__colors.flatten()) != 0:
 			# 	self.__o3d_pc.colors = o3d.utility.Vector3dVector(np.asarray(self.__colors))
 			return
@@ -70,7 +72,7 @@ class PointCloudUtils:
 			if Path(file_path).suffix == ".pcd":
 				if num_of_samples != 500: 
 					print(f"[{__file__}] Number of samples cannot be changed from pcd file...")
-				return o3d.io.read_point_cloud(file_path)
+				return cls(o3d_pc = o3d.io.read_point_cloud(file_path))
 			mesh = o3d.io.read_triangle_mesh(file_path)
 			if normals:
 				mesh.compute_vertex_normals()
@@ -229,9 +231,60 @@ class PointCloudUtils:
 			"""rotate the point cloud by R"""
 			self.points = self.points @ R.T
 
-		def to_file(self, file_path: str, binary: bool = False) -> None:
+
+		def write_pcd(self, filename):
+		# def write_pcd(self, points, normals, filename):
+			# Concatenate points and normals into a single array
+			print(f"points = {len(self.__points)} | normals = {len(self.__normals)}")
+			# Find the indices of points that have valid normals
+			valid_indices = np.where(np.isnan(self.__normals[:,0]) == False)[0]
+
+			# Extract the valid points and normals
+			valid_points = self.__points[valid_indices - 1]
+			valid_normals = self.__normals[valid_indices - 1]
+
+			# Concatenate points and normals into a single array
+			point_normals = np.concatenate((valid_points, valid_normals), axis=1)
+
+			# Write the PointCloud to a PCD file
+			with open(filename, "w") as f:
+				f.write("# .PCD v0.7 - Point Cloud Data file format\n")
+				f.write("VERSION 0.7\n")
+				f.write("FIELDS x y z normal_x normal_y normal_z\n")
+				f.write("SIZE 4 4 4 4 4 4\n")
+				f.write("TYPE F F F F F F\n")
+				f.write("COUNT 1 1 1 1 1 1\n")
+				f.write("WIDTH {}\n".format(self.__points.shape[0]))
+				f.write("HEIGHT 1\n")
+				f.write("VIEWPOINT 0 0 0 1 0 0 0\n")
+				f.write("POINTS {}\n".format(self.__points.shape[0]))
+				f.write("DATA ascii\n")
+				np.savetxt(f, point_normals, delimiter=" ")
+
+
+		def to_file(self, file_path: str, points: List = [], normals: List = [], binary: bool = False) -> None:
 			self.__o3d_pc = PointCloudUtils.PointCloud.__fill_o3d_pc(points=self.__points,normals=self.__normals)
-			o3d.io.write_point_cloud(file_path, self.__o3d_pc, write_ascii=True)
+			print(f"this many normals to file {len(self.__normals)}")
+			print(f"this many normals to file np {len(np.asarray(self.__o3d_pc.normals))}")
+			print(f"{self.__o3d_pc.has_normals()=}")
+			
+			self.__o3d_pc.normals = o3d.utility.Vector3dVector(np.array(self.__normals))
+
+			if len(points) != 0:
+				pcd = o3d.t.geometry.PointCloud()
+				pcd.point["positions"] = o3d.core.Tensor(points)
+				pcd.point["normals"] = o3d.core.Tensor(normals)
+				tmp_pc = o3d.cpu.pybind.geometry.PointCloud(pcd)
+				# tmp_pc = PointCloudUtils.PointCloud(points=points, normals=normals)
+				print(f"write file was successful: {o3d.io.write_point_cloud(file_path, tmp_pc, write_ascii=True)}")
+				return
+   
+			print(f"{self.__o3d_pc.has_normals()=}")
+   
+			if o3d.io.write_point_cloud(file_path, self.__o3d_pc, write_ascii=True):
+				print("success")
+			else:
+				print("sad face :(")
 			return
 
 		def extend(self, other):
@@ -249,20 +302,22 @@ class PointCloudUtils:
 				# pc = PointCloudUtils.PointCloud.__fill_o3d_pc(points=points,normals=normals,colors=colors)
 			else: 
 				pc = o3d.cpu.pybind.geometry.PointCloud()
-
+			# print(f"extending with {np.asarray(pc.normals)}")
 			return PointCloudUtils.PointCloud(o3d_pc = pc)
 
 		@staticmethod
-		def __fill_o3d_pc(points, normals: np.ndarray = np.ndarray([]), colors: np.ndarray = np.ndarray([])) -> o3d.cpu.pybind.geometry.PointCloud:
+		def __fill_o3d_pc(points, normals) -> o3d.cpu.pybind.geometry.PointCloud:
+		# def __fill_o3d_pc(points, normals: np.ndarray = np.ndarray([]), colors: np.ndarray = np.ndarray([])) -> o3d.cpu.pybind.geometry.PointCloud:
 			pc = o3d.cpu.pybind.geometry.PointCloud()
-			if len(normals.flatten()) != 0:
-				pc.normals = o3d.utility.Vector3dVector(np.array(normals))
 			# if len(colors.flatten()) != 0:
 			# 	print(f"{colors.flatten()=}")
 			# 	pc.colors = o3d.utility.Vector3dVector(np.array(colors))
 			if len(points) == 0:
 				raise ValueError("from_data has received an empty point cloud...")
+			if len(normals) != 0:
+				pc.normals = o3d.utility.Vector3dVector(np.array(normals))
 			pc.points = o3d.utility.Vector3dVector(np.array(points))
+			# print(f"I have filled = {np.asarray(pc.normals)}\n in normals")
 			return pc
 
 	## static utility functions ###############################################################
