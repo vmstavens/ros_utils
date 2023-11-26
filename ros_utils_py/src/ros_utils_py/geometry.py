@@ -3,6 +3,10 @@
 from geometry_msgs.msg import Vector3
 from math import sqrt, pow, acos
 from typing import Tuple
+import tf
+from math import radians
+from geometry_msgs.msg import PoseStamped, Point, Quaternion, TransformStamped, Pose
+
 
 class geometry:
 	@staticmethod
@@ -49,3 +53,28 @@ class geometry:
 	def vec2tup(v: Vector3) -> Tuple:
 		"""convert a tuple to a geometry.Vector3"""
 		return v.x, v.y, v.z
+	
+	def euler2quaternion(roll, pitch, yaw) -> Quaternion:
+		"""
+		Convert Euler angles to geometry quaternions.
+
+		Parameters:
+			roll (float): Roll angle in degrees.
+			pitch (float): Pitch angle in degrees.
+			yaw (float): Yaw angle in degrees.
+
+		Returns:
+			tuple: A tuple representing the quaternion (x, y, z, w).
+		"""
+		# Create a quaternion from Euler angles
+		
+		quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+
+		q = Quaternion()
+
+		q.x = quaternion[0]
+		q.y = quaternion[1]
+		q.z = quaternion[2]
+		q.w = quaternion[3]
+
+		return q
